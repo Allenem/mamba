@@ -951,13 +951,12 @@ class VMUNet(nn.Module):
 if __name__ == '__main__':
     model = VMUNet(input_channels=3, num_classes=1).cuda()
     print(model)
-    # # of parameters
-    num_parameters = sum([param.nelement() for param in model.parameters()]) # 44273833
-    # use M as million
-    print(f'Number of parameters: {num_parameters/1e6} M')
+    print(f'Number of parameters: {sum([param.nelement() for param in model.parameters()]) / 1e6:.2f}M')
+
     x = torch.randn(2, 3, 256, 256).cuda()
     print(f'input shape: {x.shape}')
+
     ts = time.time()
     y = model(x)
-    print(f'forward time: {time.time()-ts} s')
+    print(f'Forward time: {time.time()-ts:.2f} s')
     print(f'output shape: {y.shape}')
