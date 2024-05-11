@@ -858,6 +858,7 @@ if __name__ == '__main__':
     print(f'Input shape: {x.shape}')
 
     ts = time.time()
-    y = model(x)
+    for i in range(1000):
+        y = model(x)
     print(f'Used time: {time.time()-ts:.2f}s')
     print(f'Output shape: {y.shape}')

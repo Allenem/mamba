@@ -1,18 +1,65 @@
-# Mambar-related code
+# 1. Mambar-related code
+
+Contents:
+- [1. Mambar-related code](#1-mambar-related-code)
+  - [1.1. NLP mission](#11-nlp-mission)
+  - [1.2. Vision mission](#12-vision-mission)
+    - [1.2.1. Mamba Installation](#121-mamba-installation)
+    - [1.2.2. Comparison of different models](#122-comparison-of-different-models)
+      - [1.2.2.1. Unet](#1221-unet)
+      - [1.2.2.2. SwinUnet](#1222-swinunet)
+      - [1.2.2.3. VM-Unet](#1223-vm-unet)
+
+## 1.1. NLP mission
 
 - [NLP mission model(./NLPMission/model.py)](./NLPMission/model.py)
 
-- [Vision mission model(./VisionMission/vmunet2d.py)](./VisionMission/vmunet2d.py)
-
-# NLP mission
-
 neglect
 
-# Vision mission: Comparison of different models
+## 1.2. Vision mission
 
-## 1. Unet
+- [Vision mission model(./VisionMission/vmunet2d.py)](./VisionMission/vmunet2d.py)
 
-### Model
+### 1.2.1. Mamba Installation
+
+**Ubuntu**
+
+https://blog.csdn.net/weixin_43328758/article/details/137269102
+
+```shell
+conda create -n <your_env_name> python=3.10.13
+conda activate <your_env_name>
+conda install cudatoolkit==11.8 -c nvidia
+pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu118
+conda install -c "nvidia/label/cuda-11.8.0" cuda-nvcc
+conda install packaging
+pip install causal-conv1d==1.1.1
+pip install mamba-ssm
+```
+
+**Windows**
+
+https://blog.csdn.net/m0_59115667/article/details/137794459
+
+https://blog.csdn.net/weixin_45659168/article/details/137862487
+
+### 1.2.2. Comparison of different models
+
+|                  | Unet     | SwinUnet | VMUnet   |
+| ---------------- | -------- | -------- | -------- |
+| Parameters       | 31.04M   | 41.6M    | 44.27M   |
+| Time<sup>1</sup> | 0.00563s | 0.01432s | 0.02219s |
+
+<sup>1</sup> Time per epoch
+
+---
+
+<details open>
+<summary>View contents</summary>
+
+#### 1.2.2.1. Unet
+
+**Model**
 
 <details>
 <summary>View contents</summary>
@@ -130,7 +177,9 @@ Unet(
 
 </details>
 
-### Parameters
+**Parameters**
+
+Windows 1 epoch forward
 ```
 Number of parameters: 31.04M
 input size: torch.Size([2, 3, 256, 256])
@@ -138,9 +187,21 @@ Used time: 0.17s
 output size: torch.Size([2, 1, 256, 256])
 ```
 
-## 2. SwinUnet
+Linux 1000 epoches forward
+```
+Number of parameters: 31.04M
+input size: torch.Size([2, 3, 256, 256])
+Used time: 5.63s
+output size: torch.Size([2, 1, 256, 256])
+```
 
-### Model
+1 epoch: 5.63s / 1000 = 0.00563s
+
+---
+
+#### 1.2.2.2. SwinUnet
+
+**Model**
 
 <details>
 <summary>View contents</summary>
@@ -676,8 +737,9 @@ SwinUnet(
 
 </details>
 
-### Parameters
+**Parameters**
 
+Windows 1 epoch forward
 ```
 Number of parameters: 41.39M
 Input shape: torch.Size([2, 3, 256, 256])
@@ -685,9 +747,21 @@ Used time: 0.15s
 Output shape: torch.Size([2, 1, 256, 256])
 ```
 
-## 3. VM-Unet
+Linux 1000 epoches forward
+```
+Number of parameters: 41.39M
+Input shape: torch.Size([2, 3, 256, 256])
+Used time: 14.32s
+Output shape: torch.Size([2, 1, 256, 256])
+```
 
-### Model
+1 epoch: 14.32s / 1000 = 0.01432s
+
+---
+
+#### 1.2.2.3. VM-Unet
+
+**Model**
 
 <details>
 <summary>View contents</summary>
@@ -1101,11 +1175,24 @@ VMUNet(
 
 </details>
 
-### Parameters
+**Parameters**
 
+Windows 1 epoch forward
 ```
 Number of parameters: 44.27M
 input shape: torch.Size([2, 3, 256, 256])
 Forward time: 3.71 s
 output shape: torch.Size([2, 1, 256, 256])
 ```
+
+Linux 1000 epoches forward
+```
+Number of parameters: 44.27M
+input shape: torch.Size([2, 3, 256, 256])
+Forward time: 22.19 s
+output shape: torch.Size([2, 1, 256, 256])
+```
+
+1 epoch: 22.19 / 1000 = 0.02219s
+
+</details>
